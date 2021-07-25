@@ -33,7 +33,7 @@ public class Disown implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!player.hasPermission(ItemOwnerPermissions.DISOWN)) {
-            player.sendMessage("You do not have permission to disown items.");
+            player.sendMessage(ChatColor.RED + "You do not have permission to disown items.");
             return true;
         }
 

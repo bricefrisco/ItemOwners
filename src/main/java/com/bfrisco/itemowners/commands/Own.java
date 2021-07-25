@@ -35,7 +35,7 @@ public class Own implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!player.hasPermission(ItemOwnerPermissions.OWN)) {
-            player.sendMessage("You do not have permission to own items.");
+            player.sendMessage(ChatColor.RED + "You do not have permission to own items.");
             return true;
         }
 
