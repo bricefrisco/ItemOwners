@@ -27,6 +27,7 @@ public class ItemsOwned implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) return false;
+        if (args == null || args.length == 0 || args.length > 2) return false;
 
         Player player = (Player) sender;
 
