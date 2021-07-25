@@ -1,9 +1,6 @@
 package com.bfrisco.itemowners.database;
 
 public enum ItemEventType {
-    OWNED,
-    UNOWNED,
-
     INVENTORY_TO_CURSOR,
     STORAGE_TO_CURSOR,
     TO_INVENTORY,
@@ -19,5 +16,7 @@ public enum ItemEventType {
 
     DESPAWNED,
     DAMAGED,
-    BROKE
+    BROKE,
+
+    TRADED
 }

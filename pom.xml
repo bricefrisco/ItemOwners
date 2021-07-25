@@ -31,6 +31,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>de.oppermann.bastian.safetrade</groupId>
+            <artifactId>safetrade</artifactId>
+            <version>1.1.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
             <version>2.2.1</version>
@@ -44,7 +50,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>ItemOwners-${version}</finalName>
+        <finalName>ItemOwners-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

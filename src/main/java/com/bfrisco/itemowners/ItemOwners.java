@@ -10,7 +10,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -22,12 +24,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ItemOwners extends JavaPlugin {
+    private static ItemOwners plugin;
     private static Logger logger;
     private static FileConfiguration config;
     private static File dataFolder;
     private static final List<Material> VALID_ITEMS = new ArrayList<>();
 
     public ItemOwners() throws SQLException {
+        plugin = this;
         logger = getLogger();
         config = getConfig();
         dataFolder = getDataFolder();
@@ -42,7 +46,6 @@ public class ItemOwners extends JavaPlugin {
 
         ItemRepository.init(loadFile("items.db"));
         ItemEventRepository.init(loadFile("events.db"));
-
     }
 
 
@@ -56,7 +59,12 @@ public class ItemOwners extends JavaPlugin {
         this.getConfig().options().copyDefaults();
         saveDefaultConfig();
 
-        Bukkit.getPluginManager().registerEvents(new OwnedItemListener(this), this);
+        registerEvents(new DependencyManager(this));
+        registerEvents(new OwnedItemListener(this));
+    }
+
+    public static void registerEvents(Listener listener) {
+        Bukkit.getPluginManager().registerEvents(listener, plugin);
     }
 
     public static boolean isNotValid(ItemStack item) {

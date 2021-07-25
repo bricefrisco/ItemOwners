@@ -1,2 +1,8 @@
+# Please don't change this
+version: 1
+
+# Items that can be owned
 items: ['DIAMOND_SWORD', 'DIAMOND_AXE', 'DIAMOND_PICKAXE']
+
+# How long in days the item events should be stored
 retention-period: 14

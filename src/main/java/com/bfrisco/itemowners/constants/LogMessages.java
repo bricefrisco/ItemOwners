@@ -17,4 +17,6 @@ public interface LogMessages {
     String DESPAWNED = "%s was despawned after being dropped for 5 minutes";
     String DAMAGED = "%s was damaged";
     String BROKE = "%s broke";
+
+    String TRADED = "%s was traded by player %s to player %s";
 }
