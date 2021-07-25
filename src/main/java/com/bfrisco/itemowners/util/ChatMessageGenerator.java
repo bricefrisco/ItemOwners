@@ -53,7 +53,7 @@ public final class ChatMessageGenerator {
         }
 
         if (page.getCurrentPage() > page.getTotalPages()) {
-            throw new ChatMessageGeneratorException("Unknown chapter.");
+            throw new ChatMessageGeneratorException(ChatColor.RED + "Unknown chapter.");
         }
 
         int count = 1;
