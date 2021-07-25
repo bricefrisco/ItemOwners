@@ -18,3 +18,30 @@ commands:
   itemsowned:
     description: View the items owned by a specified player.
     usage: /<command> <player name> (page)
+
+permissions:
+  ItemOwners.*:
+    description: Gives access to all ItemOwners permisisons
+    default: op
+    children:
+      ItemOwners.own: true
+      ItemOwners.disown.own: true
+      ItemOwners.disown.all: true
+      ItemOwners.list.own: true
+      ItemOwners.list.all: true
+      ItemOwners.view.own: true
+      ItemOwners.view.all: true
+  ItemOwners.own:
+    description: Allows the player to own items
+  ItemOwners.disown.own:
+    description: Allows the player to disown their own items
+  ItemOwners.disown.all:
+    description: Allows the player to disown all items
+  ItemOwners.list.own:
+    description: Allows the player to list their own items
+  ItemOwners.list.all:
+    description: Allows the player to list all items
+  ItemOwners.view.own:
+    description: Allows the player to see their own tools events
+  ItemOwners.view.all:
+    description: Allows the player to see all tool events
