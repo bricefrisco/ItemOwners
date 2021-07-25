@@ -1,5 +1,6 @@
 package com.bfrisco.itemowners.commands;
 
+import com.bfrisco.itemowners.ItemOwners;
 import com.bfrisco.itemowners.constants.ItemOwnerPermissions;
 import com.bfrisco.itemowners.database.Item;
 import com.bfrisco.itemowners.database.ItemEventPage;
@@ -73,7 +74,9 @@ public class ItemHistory implements CommandExecutor {
                 if (item.getOwnerId().equals(player.getUniqueId().toString()) && !player.hasPermission(ItemOwnerPermissions.VIEW_OWN_TOOL_EVENTS)) {
                     player.sendMessage(ChatColor.RED + "You don't have permission to view your own item events.");
                     return;
-                } else if (!player.hasPermission(ItemOwnerPermissions.VIEW_ALL_TOOL_EVENTS)) {
+                }
+
+                if (!item.getOwnerId().equals(player.getUniqueId().toString()) && !player.hasPermission(ItemOwnerPermissions.VIEW_ALL_TOOL_EVENTS)) {
                     player.sendMessage(ChatColor.RED + "You don't have permission to view other's tool events.");
                     return;
                 }
