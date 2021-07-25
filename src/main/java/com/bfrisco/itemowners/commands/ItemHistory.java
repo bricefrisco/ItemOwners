@@ -1,6 +1,5 @@
 package com.bfrisco.itemowners.commands;
 
-import com.bfrisco.itemowners.ItemOwners;
 import com.bfrisco.itemowners.constants.ItemOwnerPermissions;
 import com.bfrisco.itemowners.database.Item;
 import com.bfrisco.itemowners.database.ItemEventPage;

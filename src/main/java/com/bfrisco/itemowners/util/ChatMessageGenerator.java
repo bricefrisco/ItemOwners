@@ -5,10 +5,7 @@ import com.bfrisco.itemowners.database.ItemEvent;
 import com.bfrisco.itemowners.database.ItemEventPage;
 import com.bfrisco.itemowners.database.ItemPage;
 import com.bfrisco.itemowners.exceptions.ChatMessageGeneratorException;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
@@ -32,6 +29,7 @@ public final class ChatMessageGenerator {
 
         TextComponent id = new TextComponent(ChatColor.GOLD + "[" + ChatColor.RED + itemId + ChatColor.GOLD + "]\n");
         id.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, generateTooltip(itemData)));
+        id.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, itemId));
         message.addExtra(id);
 
         return message;
@@ -64,6 +62,7 @@ public final class ChatMessageGenerator {
 
             TextComponent itemIdPart = new TextComponent(ChatColor.WHITE + "[" + ChatColor.YELLOW + item.getId() + ChatColor.WHITE + "]");
             itemIdPart.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, generateTooltip(item.getData())));
+            itemIdPart.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, item.getId()));
             message.addExtra(itemIdPart);
 
             if (count != page.getResult().size()) {
@@ -142,7 +141,12 @@ public final class ChatMessageGenerator {
             if (item.getItemMeta().getLore() != null) {
                 text.addExtra(String.join("\n", item.getItemMeta().getLore()));
             }
+
+            text.addExtra("\n");
+
         }
+
+        text.addExtra("\n" + ChatColor.GRAY + ChatColor.ITALIC + "Click to copy Item ID.");
 
         return new ComponentBuilder(text).create();
     }
