@@ -1,0 +1,11 @@
+version: 1.0
+name: ItemOwners
+main: com.bfrisco.itemowners.ItemOwners
+author: bfrisco
+description: Enables players to own and track their items.
+api-version: '1.16'
+commands:
+  own:
+  itemhistory:
+  itemsowned:
+  disown:
