@@ -53,8 +53,8 @@ Hovering over the Item ID will show the item name, enchantments, and metadata.
 
 - ***/itemsowned <player name> (page)***
   
-**Description:** View the items owned by a specified player.
-
-**Permissions:**
+  **Description:** View the items owned by a specified player.
+  
+  **Permissions:**
     - *ItemOwners.list.own - View the items you own*
     - *ItemOwners.list.any - View the items **any** player owns*
