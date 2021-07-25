@@ -2,7 +2,16 @@
 version: 1
 
 # Items that can be owned
-items: ['DIAMOND_SWORD', 'DIAMOND_AXE', 'DIAMOND_PICKAXE']
+items: [
+    'DIAMOND_PICKAXE', 'DIAMOND_SHOVEL', 'DIAMOND_HOE', 'DIAMOND_SWORD', 'DIAMOND_AXE',
+    'DIAMOND_BOOTS', 'DIAMOND_LEGGINGS', 'DIAMOND_CHESTPLATE', 'DIAMOND_HELMET',
+    'NETHERITE_PICKAXE', 'NETHERITE_SHOVEL', 'NETHERITE_HOE', 'NETHERITE_SWORD', 'NETHERITE_AXE',
+    'NETHERITE_BOOTS', 'NETHERITE_LEGGINGS', 'NETHERITE_CHESTPLATE', 'NETHERITE_HELMET',
+
+]
 
 # How long in days the item events should be stored
 retention-period: 14
+
+# Worlds that players can not own items on
+disabled-worlds: ['example-world']

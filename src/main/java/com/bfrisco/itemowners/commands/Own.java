@@ -55,6 +55,11 @@ public class Own implements CommandExecutor {
             return true;
         }
 
+        if (ItemOwners.getBukkitConfig().getStringList("disabled-worlds").contains(player.getWorld().getName())) {
+            player.sendMessage(ChatColor.RED + "You cannot own items in this world " + player.getWorld().getName() + ".");
+            return true;
+        }
+
         if (limiter.isLimited(player.getUniqueId())) {
            long secondsLeft = limiter.secondsLeft(player.getUniqueId());
            player.sendMessage(ChatColor.RED + "Please wait " + secondsLeft + " seconds and try again.");

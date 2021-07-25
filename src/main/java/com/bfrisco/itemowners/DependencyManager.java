@@ -3,11 +3,10 @@ package com.bfrisco.itemowners;
 import com.bfrisco.itemowners.constants.DependencyNames;
 import com.bfrisco.itemowners.listeners.SafeTradeListener;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
-
-import java.util.List;
 
 public class DependencyManager implements Listener {
     private final Plugin plugin;
@@ -16,7 +15,7 @@ public class DependencyManager implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onEnable(PluginEnableEvent event) {
         Plugin plugin = event.getPlugin();
         loadPlugin(plugin.getName());
