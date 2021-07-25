@@ -16,7 +16,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -67,6 +66,7 @@ public class ItemOwners extends JavaPlugin {
 
         Plugin safeTrade = getServer().getPluginManager().getPlugin(DependencyNames.SAFE_TRADE);
         if (safeTrade != null) {
+            getLogger().info("Successfully hooked into " + DependencyNames.SAFE_TRADE);
             registerEvent(new SafeTradeListener(this));
         }
     }
