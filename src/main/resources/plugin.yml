@@ -1,4 +1,4 @@
-name: ${project.name}
+name: ItemOwners
 version: ${project.version}
 main: com.bfrisco.itemowners.ItemOwners
 author: bfrisco
@@ -8,16 +8,16 @@ softdepend: [SafeTrade]
 commands:
   own:
     description: Own an item that is in your hand
-    usage: /<command>
+    usage: §7/<command>
   disown:
     description: Disowns an item that is in your hand
-    usage: /<command>
+    usage: §7/<command>
   itemhistory:
     description: View an items history in reverse-chronological order.
-    usage: /<command> <item id> (page)
+    usage: §7/<command> <item id> (page)
   itemsowned:
     description: View the items owned by a specified player.
-    usage: /<command> <player name> (page)
+    usage: §7/<command> <player name> (page)
 
 permissions:
   ItemOwners.*:
