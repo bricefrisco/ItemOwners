@@ -11,10 +11,12 @@ ItemOwners is a plugin that allows players to own items and view an items histor
 
 #### ItemHistory
 ![ItemHistory](https://i.imgur.com/GgPlfFi.jpg)
+
 Hovering over **[loc]** will show you the location, and hovering over **[pl]** will show you the player that had the item.
 
 #### ItemsOwned
 ![ItemsOwned](https://i.imgur.com/H0Q70VM.jpg)
+
 Hovering over the Item ID will show the item name, enchantments, and metadata.
 
 
