@@ -28,8 +28,9 @@ public final class ChatMessageGenerator {
                 + ChatColor.YELLOW + " -- " + ChatColor.GOLD + "Page " + ChatColor.RED + page.getCurrentPage() +
                 ChatColor.GOLD + "/" + ChatColor.RED + page.getTotalPages() + ChatColor.YELLOW + " ----\n");
 
+        message.addExtra(ChatColor.GOLD + "Item ID: ");
 
-        TextComponent id = new TextComponent(ChatColor.GOLD + "Item ID: " + ChatColor.RED + itemId + "\n");
+        TextComponent id = new TextComponent(ChatColor.GOLD + "[" + ChatColor.RED + itemId + ChatColor.GOLD + "]\n");
         id.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, generateTooltip(itemData)));
         message.addExtra(id);
 
