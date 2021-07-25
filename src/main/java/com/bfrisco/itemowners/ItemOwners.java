@@ -1,11 +1,14 @@
 package com.bfrisco.itemowners;
+
 import com.bfrisco.itemowners.commands.Own;
 import com.bfrisco.itemowners.commands.Disown;
 import com.bfrisco.itemowners.commands.ItemHistory;
 import com.bfrisco.itemowners.commands.ItemsOwned;
+import com.bfrisco.itemowners.constants.DependencyNames;
 import com.bfrisco.itemowners.database.ItemEventRepository;
 import com.bfrisco.itemowners.database.ItemRepository;
 import com.bfrisco.itemowners.listeners.OwnedItemListener;
+import com.bfrisco.itemowners.listeners.SafeTradeListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,6 +16,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -59,11 +63,15 @@ public class ItemOwners extends JavaPlugin {
         this.getConfig().options().copyDefaults();
         saveDefaultConfig();
 
-        registerEvents(new DependencyManager(this));
-        registerEvents(new OwnedItemListener(this));
+        registerEvent(new OwnedItemListener(this));
+
+        Plugin safeTrade = getServer().getPluginManager().getPlugin(DependencyNames.SAFE_TRADE);
+        if (safeTrade != null) {
+            registerEvent(new SafeTradeListener(this));
+        }
     }
 
-    public static void registerEvents(Listener listener) {
+    public static void registerEvent(Listener listener) {
         Bukkit.getPluginManager().registerEvents(listener, plugin);
     }
 
