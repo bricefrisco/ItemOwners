@@ -1,12 +1,20 @@
-version: 1.0
-name: ItemOwners
+name: ${project.name}
+version: ${project.version}
 main: com.bfrisco.itemowners.ItemOwners
 author: bfrisco
 description: Enables players to own and track their items.
-api-version: '1.16'
+api-version: 1.16
 softdepend: [SafeTrade]
 commands:
   own:
-  itemhistory:
-  itemsowned:
+    description: Own an item that is in your hand
+    usage: /<command>
   disown:
+    description: Disowns an item that is in your hand
+    usage: /<command>
+  itemhistory:
+    description: View an items history in reverse-chronological order.
+    usage: /<command> <item id> (page)
+  itemsowned:
+    description: View the items owned by a specified player.
+    usage: /<command> <player name> (page)
