@@ -78,6 +78,7 @@ public class ItemOwners extends JavaPlugin {
     public static boolean isNotValid(ItemStack item) {
         if (item == null) return true;
         if (item.getAmount() != 1) return true;
+        if (item.getMaxStackSize() != 1) return true;
         if (item.getItemMeta() == null) return true;
         return !VALID_ITEMS.contains(item.getType());
     }
