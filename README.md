@@ -28,12 +28,14 @@ Hovering over the Item ID will show the item name, enchantments, and metadata.
 - ***/own***
   
   **Description:** *Own an item that is in your hand*
+  
   **Permission:** *ItemOwners.own - Own items*
 
 
 - ***/disown***
   
   **Description:** *Disowns an item that is in your hand*
+  
   **Permissions:**
     - *ItemOwners.disown.own - Disown your own items*
     - *ItemOwners.disown.all - Disown **any** item*
@@ -42,6 +44,7 @@ Hovering over the Item ID will show the item name, enchantments, and metadata.
 - ***/itemhistory <item id> (page)***
   
   **Description:** *View an items history in reverse-chronological order.*
+  
   **Permissions:**
     - *ItemOwners.view.own - View history for your own items*
     - *ItemOwners.view.all - View history for **any** item*
@@ -50,6 +53,7 @@ Hovering over the Item ID will show the item name, enchantments, and metadata.
 - ***/itemsowned <player name> (page)***
   
 - **Description:** View the items owned by a specified player.
+
 - **Permissions:**
     - *ItemOwners.list.own - View the items you own*
     - *ItemOwners.list.any - View the items **any** player owns*
