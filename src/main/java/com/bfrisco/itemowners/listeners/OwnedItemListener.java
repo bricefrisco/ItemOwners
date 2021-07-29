@@ -4,26 +4,62 @@ import com.bfrisco.itemowners.ItemOwners;
 import com.bfrisco.itemowners.constants.LogMessages;
 import com.bfrisco.itemowners.database.ItemEventRepository;
 import com.bfrisco.itemowners.database.ItemEventType;
+import com.bfrisco.itemowners.util.CIConfirmationDetector;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class OwnedItemListener implements Listener {
     private final Plugin plugin;
+    private static final List<String> CLEAR_INVENTORY = Arrays.asList("/ci", "/eci", "/clean", "/eclean", "/clear", "/eclear", "/clearinvent", "/eclearinvent", "/eclearinventory");
+    private final CIConfirmationDetector ciConfirmation = new CIConfirmationDetector();
 
     public OwnedItemListener(Plugin plugin) {
         this.plugin = plugin;
+    }
+
+    @EventHandler
+    public void onInventoryCloseEvent(InventoryCloseEvent event) {
+        if (!(event.getView().title() instanceof TextComponent tc)) return;
+        if (tc.content().equalsIgnoreCase("disposal")) {
+            for (ItemStack item : event.getInventory().getContents()) {
+                String itemId = ItemOwners.getItemId(item);
+                if (itemId == null) continue;
+                ItemOwners.getBukkitLogger().info("Player disposed item!");
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
+        if (CLEAR_INVENTORY.contains(event.getMessage())) {
+            for (ItemStack item : event.getPlayer().getInventory().getContents()) {
+                String itemId = ItemOwners.getItemId(item);
+                if (itemId == null) continue;
+
+                if (ItemOwners.getBukkitConfig().getBoolean("clear-inventory-confirmation")) {
+                    if (ciConfirmation.hasConfirmed(event.getPlayer().getUniqueId())) {
+                        ItemOwners.getBukkitLogger().info("Player cleared inventory with item!");
+                    }
+                    return;
+                }
+
+                ItemOwners.getBukkitLogger().info("Player cleared inventory with item!");
+            }
+        }
     }
 
     @EventHandler
@@ -89,10 +125,13 @@ public class OwnedItemListener implements Listener {
 
     @EventHandler
     public void onEntityDamageEvent(EntityDamageEvent event) {
-        if (!(event.getEntity() instanceof Item)) return;
-        Item item = (Item) event.getEntity();
+        if (!(event.getEntity() instanceof Item item)) return;
+
         String itemId = ItemOwners.getItemId(item.getItemStack());
         if (itemId == null) return; // Item damage event does not involve owned items.
+//        ItemOwners.getBukkitLogger().info("Damage dealt: " + event.getFinalDamage());
+//        ItemOwners.getBukkitLogger().info("Item is dead: " + item.isDead());
+//        ItemOwners.getBukkitLogger().info("Item is valid: " + item.isValid());
         log(String.format(LogMessages.DAMAGED, itemId));
         runAsync(() -> ItemEventRepository.save(ItemEventType.DAMAGED, itemId, event.getEntity().getLocation()));
     }
@@ -304,6 +343,5 @@ public class OwnedItemListener implements Listener {
     private void runAsync(Runnable runnable) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable);
     }
-
 
 }

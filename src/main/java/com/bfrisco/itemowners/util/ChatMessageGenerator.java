@@ -6,12 +6,12 @@ import com.bfrisco.itemowners.database.ItemEventPage;
 import com.bfrisco.itemowners.database.ItemPage;
 import com.bfrisco.itemowners.exceptions.ChatMessageGeneratorException;
 import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -61,6 +61,7 @@ public final class ChatMessageGenerator {
             message.addExtra(ChatColor.GRAY + DATE_FORMAT.format(item.getDate()) + ": ");
 
             TextComponent itemIdPart = new TextComponent(ChatColor.WHITE + "[" + ChatColor.YELLOW + item.getId() + ChatColor.WHITE + "]");
+
             itemIdPart.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, generateTooltip(item.getData())));
             itemIdPart.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, item.getId()));
             message.addExtra(itemIdPart);
@@ -118,7 +119,7 @@ public final class ChatMessageGenerator {
         return message;
     }
 
-    private static BaseComponent[] generateTooltip(String data) throws IOException {
+    private static Text generateTooltip(String data) throws IOException {
         TextComponent text = new TextComponent();
 
         ItemStack item = ItemSerialization.fromBase64(data);
@@ -132,22 +133,18 @@ public final class ChatMessageGenerator {
         if (item.getItemMeta() != null) {
             text.addExtra("\n");
 
-            item.getItemMeta().getEnchants().keySet().forEach(enchant -> {
-                text.addExtra(ChatColor.GRAY + WordUtils.capitalize(enchant.getKey().getKey()) + " " +
-                        RomanNumber.toRoman(item.getItemMeta().getEnchants().get(enchant)) +
-                        "\n");
-            });
+            item.getItemMeta().getEnchants().keySet().forEach(enchant -> text.addExtra(ChatColor.GRAY + WordUtils.capitalize(enchant.getKey().getKey().replace("_", "")) + " " +
+                    RomanNumber.toRoman(item.getItemMeta().getEnchants().get(enchant)) +
+                    "\n"));
 
             if (item.getItemMeta().getLore() != null) {
                 text.addExtra(String.join("\n", item.getItemMeta().getLore()));
             }
-
             text.addExtra("\n");
-
         }
 
         text.addExtra("\n" + ChatColor.GRAY + ChatColor.ITALIC + "Click to copy Item ID.");
 
-        return new ComponentBuilder(text).create();
+        return new Text(new ComponentBuilder(text).create());
     }
 }
