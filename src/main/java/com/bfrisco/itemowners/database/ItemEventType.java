@@ -5,6 +5,8 @@ public enum ItemEventType {
     STORAGE_TO_CURSOR,
     TO_INVENTORY,
     TO_STORAGE,
+    TO_ENDER_CHEST,
+    TO_PLAYER_VAULT,
 
     TO_INVENTORY_BY_UNKNOWN,
     TO_STORAGE_BY_UNKNOWN,
@@ -17,6 +19,8 @@ public enum ItemEventType {
     DESPAWNED,
     DAMAGED,
     BROKE,
+    DISPOSED,
+    CLEARED_INVENTORY,
 
     TRADED
 }

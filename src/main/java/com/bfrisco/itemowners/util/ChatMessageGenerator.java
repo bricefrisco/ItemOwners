@@ -60,7 +60,12 @@ public final class ChatMessageGenerator {
         for (Item item : page.getResult()) {
             message.addExtra(ChatColor.GRAY + DATE_FORMAT.format(item.getDate()) + ": ");
 
-            TextComponent itemIdPart = new TextComponent(ChatColor.WHITE + "[" + ChatColor.YELLOW + item.getId() + ChatColor.WHITE + "]");
+            TextComponent itemIdPart;
+            if (item.getLastEventDestruction()) {
+                itemIdPart = new TextComponent(ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "[" + item.getId() + "]");
+            } else {
+                itemIdPart = new TextComponent(ChatColor.WHITE + "[" + ChatColor.YELLOW + item.getId() + ChatColor.WHITE + "]");
+            }
 
             itemIdPart.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, generateTooltip(item.getData())));
             itemIdPart.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, item.getId()));

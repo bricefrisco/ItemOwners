@@ -7,6 +7,7 @@ import com.bfrisco.itemowners.database.ItemEventType;
 import com.bfrisco.itemowners.util.CIConfirmationDetector;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.block.EnderChest;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,13 +34,39 @@ public class OwnedItemListener implements Listener {
 
     @EventHandler
     public void onInventoryCloseEvent(InventoryCloseEvent event) {
+        if (!(event.getPlayer() instanceof Player player))  return;
         if (!(event.getView().title() instanceof TextComponent tc)) return;
+
         if (tc.content().equalsIgnoreCase("disposal")) {
             for (ItemStack item : event.getInventory().getContents()) {
                 String itemId = ItemOwners.getItemId(item);
                 if (itemId == null) continue;
-                ItemOwners.getBukkitLogger().info("Player disposed item!");
+                log(String.format(LogMessages.DISPOSED, itemId, player.getUniqueId()));
+                runAsync(() -> ItemEventRepository.save(ItemEventType.DISPOSED, itemId, player));
             }
+        }
+
+        else if (tc.content().equalsIgnoreCase("ender chest")) {
+            for (ItemStack item : event.getInventory().getContents()) {
+                String itemId = ItemOwners.getItemId(item);
+                if (itemId == null) continue;
+                log(String.format(LogMessages.TO_ENDER_CHEST, itemId, player.getUniqueId()));
+                runAsync(() -> ItemEventRepository.save(ItemEventType.TO_ENDER_CHEST, itemId, player));
+            }
+        }
+
+        else if (tc.content().contains("Vault #")) {
+            String vaultNumber = tc.content().split("#")[1];
+            for (ItemStack item : event.getInventory().getContents()) {
+                String itemId = ItemOwners.getItemId(item);
+                if (itemId == null) continue;
+                log(String.format(LogMessages.TO_PLAYER_VAULT, itemId, vaultNumber, player));
+                runAsync(() -> ItemEventRepository.save(ItemEventType.TO_PLAYER_VAULT, itemId, player));
+            }
+        }
+
+        else {
+            ItemOwners.getBukkitLogger().info("Inventory name: " + tc.content());
         }
     }
 
@@ -52,12 +79,14 @@ public class OwnedItemListener implements Listener {
 
                 if (ItemOwners.getBukkitConfig().getBoolean("clear-inventory-confirmation")) {
                     if (ciConfirmation.hasConfirmed(event.getPlayer().getUniqueId())) {
-                        ItemOwners.getBukkitLogger().info("Player cleared inventory with item!");
+                        log(String.format(LogMessages.CLEARED_INVENTORY, itemId, event.getPlayer().getUniqueId()));
+                        runAsync(() -> ItemEventRepository.save(ItemEventType.CLEARED_INVENTORY, itemId, event.getPlayer()));
                     }
                     return;
                 }
 
-                ItemOwners.getBukkitLogger().info("Player cleared inventory with item!");
+                log(String.format(LogMessages.CLEARED_INVENTORY, itemId, event.getPlayer().getUniqueId()));
+                runAsync(() -> ItemEventRepository.save(ItemEventType.CLEARED_INVENTORY, itemId, event.getPlayer()));
             }
         }
     }
@@ -128,10 +157,7 @@ public class OwnedItemListener implements Listener {
         if (!(event.getEntity() instanceof Item item)) return;
 
         String itemId = ItemOwners.getItemId(item.getItemStack());
-        if (itemId == null) return; // Item damage event does not involve owned items.
-//        ItemOwners.getBukkitLogger().info("Damage dealt: " + event.getFinalDamage());
-//        ItemOwners.getBukkitLogger().info("Item is dead: " + item.isDead());
-//        ItemOwners.getBukkitLogger().info("Item is valid: " + item.isValid());
+        if (itemId == null) return;
         log(String.format(LogMessages.DAMAGED, itemId));
         runAsync(() -> ItemEventRepository.save(ItemEventType.DAMAGED, itemId, event.getEntity().getLocation()));
     }

@@ -1,5 +1,6 @@
 package com.bfrisco.itemowners.database;
 
+import com.bfrisco.itemowners.ItemOwners;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
@@ -8,6 +9,7 @@ import com.j256.ormlite.table.TableUtils;
 import java.io.File;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 public final class ItemRepository {
@@ -33,6 +35,7 @@ public final class ItemRepository {
         List<Item> items = repository.queryBuilder()
                 .offset((page - 1) * PAGE_SIZE)
                 .limit(PAGE_SIZE)
+                .orderBy("lastEventDestruction", true)
                 .orderBy("date", false)
                 .where().eq("ownerId", playerId).query();
 
@@ -47,6 +50,7 @@ public final class ItemRepository {
         item.setOwnerId(ownerId);
         item.setData(data);
         item.setDate(new Date(System.currentTimeMillis()));
+        item.setLastEventDestruction(Boolean.FALSE);
         repository.create(item);
     }
 
@@ -61,4 +65,17 @@ public final class ItemRepository {
     public static Item findById(String itemId) throws SQLException {
         return repository.queryForId(itemId);
     }
+
+    public static void lastEventDestruction(String itemId, Boolean destructed) throws SQLException {
+        Item item = findById(itemId);
+
+        if (item == null) {
+            ItemOwners.getBukkitLogger().warning("Event occurred with item " + itemId + ", but this item is not in the database.");
+            return;
+        }
+
+        item.setLastEventDestruction(destructed);
+        repository.update(item);
+    }
+
 }

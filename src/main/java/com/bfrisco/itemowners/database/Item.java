@@ -13,11 +13,14 @@ public class Item {
     @DatabaseField(canBeNull = false)
     private Date date;
 
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = false, index = true)
     private String ownerId;
 
     @DatabaseField(canBeNull = false)
     private String data;
+
+    @DatabaseField(canBeNull = false)
+    private Boolean lastEventDestruction;
 
     public String getId() {
         return id;
@@ -49,5 +52,13 @@ public class Item {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Boolean getLastEventDestruction() {
+        return lastEventDestruction;
+    }
+
+    public void setLastEventDestruction(Boolean lastEventDestruction) {
+        this.lastEventDestruction = lastEventDestruction;
     }
 }

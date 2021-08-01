@@ -11,17 +11,25 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 public final class ItemEventRepository {
     private static Dao<ItemEvent, Long> repository;
     private static final long PAGE_SIZE = 7;
+    private static List<String> DELETE_EVENT_TYPES;
 
     public static void init(File databaseFile) throws SQLException {
         JdbcPooledConnectionSource source = new JdbcPooledConnectionSource("jdbc:sqlite:" + databaseFile.getAbsolutePath());
         TableUtils.createTableIfNotExists(source, ItemEvent.class);
 
         repository = DaoManager.createDao(source, ItemEvent.class);
+        DELETE_EVENT_TYPES = Arrays.asList(
+                ItemEventType.CLEARED_INVENTORY.name(),
+                ItemEventType.BROKE.name(),
+                ItemEventType.DISPOSED.name(),
+                ItemEventType.DAMAGED.name(),
+                ItemEventType.DESPAWNED.name());
     }
 
     public static void save(ItemEventType type, String itemId, Player player) {
@@ -73,6 +81,12 @@ public final class ItemEventRepository {
     public static void save(ItemEvent e) {
         try {
             repository.create(e);
+
+            if (DELETE_EVENT_TYPES.contains(e.getItemEventType())) {
+                ItemRepository.lastEventDestruction(e.getItemId(), Boolean.TRUE);
+            } else {
+                ItemRepository.lastEventDestruction(e.getItemId(), Boolean.FALSE);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
