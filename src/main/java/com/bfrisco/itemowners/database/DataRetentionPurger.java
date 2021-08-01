@@ -8,15 +8,10 @@ import java.sql.Date;
 import java.sql.SQLException;
 
 public class DataRetentionPurger {
-    private final Plugin plugin;
     private static final long DAY = 24 * 60 * 60 * 1000;
     private static final long HOUR = 60 * 60 * 1000;
 
-    public DataRetentionPurger(Plugin plugin) {
-        this.plugin = plugin;
-    }
-
-    public void schedule() {
+    public static void schedule(Plugin plugin) {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             try {
                 long retentionInDays = ItemOwners.getBukkitConfig().getLong("retention-period");

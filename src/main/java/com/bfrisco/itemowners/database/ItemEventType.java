@@ -21,6 +21,8 @@ public enum ItemEventType {
     BROKE,
     DISPOSED,
     CLEARED_INVENTORY,
+    SALVAGED,
 
-    TRADED
+    TRADED,
+    GRINDED
 }

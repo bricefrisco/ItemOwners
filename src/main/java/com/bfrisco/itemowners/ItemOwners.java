@@ -5,8 +5,10 @@ import com.bfrisco.itemowners.commands.Disown;
 import com.bfrisco.itemowners.commands.ItemHistory;
 import com.bfrisco.itemowners.commands.ItemsOwned;
 import com.bfrisco.itemowners.constants.DependencyNames;
+import com.bfrisco.itemowners.database.DataRetentionPurger;
 import com.bfrisco.itemowners.database.ItemEventRepository;
 import com.bfrisco.itemowners.database.ItemRepository;
+import com.bfrisco.itemowners.listeners.McMMOListener;
 import com.bfrisco.itemowners.listeners.OwnedItemListener;
 import com.bfrisco.itemowners.listeners.SafeTradeListener;
 import org.bukkit.Bukkit;
@@ -64,11 +66,19 @@ public class ItemOwners extends JavaPlugin {
 
         registerEvent(new OwnedItemListener(this));
 
-        Plugin safeTrade = getServer().getPluginManager().getPlugin(DependencyNames.SAFE_TRADE);
-        if (safeTrade != null) {
+        Plugin dependency = getServer().getPluginManager().getPlugin(DependencyNames.SAFE_TRADE);
+        if (dependency != null) {
             getLogger().info("Successfully hooked into " + DependencyNames.SAFE_TRADE);
             registerEvent(new SafeTradeListener(this));
         }
+
+        dependency = getServer().getPluginManager().getPlugin(DependencyNames.MCMMO);
+        if (dependency != null) {
+            getLogger().info("Successfully hooked into " + DependencyNames.MCMMO);
+            registerEvent(new McMMOListener(this));
+        }
+
+        DataRetentionPurger.schedule(this);
     }
 
     public static void registerEvent(Listener listener) {

@@ -7,7 +7,6 @@ import com.bfrisco.itemowners.database.ItemEventType;
 import com.bfrisco.itemowners.util.CIConfirmationDetector;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.block.EnderChest;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,7 +40,7 @@ public class OwnedItemListener implements Listener {
             for (ItemStack item : event.getInventory().getContents()) {
                 String itemId = ItemOwners.getItemId(item);
                 if (itemId == null) continue;
-                log(String.format(LogMessages.DISPOSED, itemId, player.getUniqueId()));
+                log(String.format(LogMessages.DISPOSED, itemId, player.getName()));
                 runAsync(() -> ItemEventRepository.save(ItemEventType.DISPOSED, itemId, player));
             }
         }
@@ -50,7 +49,7 @@ public class OwnedItemListener implements Listener {
             for (ItemStack item : event.getInventory().getContents()) {
                 String itemId = ItemOwners.getItemId(item);
                 if (itemId == null) continue;
-                log(String.format(LogMessages.TO_ENDER_CHEST, itemId, player.getUniqueId()));
+                log(String.format(LogMessages.TO_ENDER_CHEST, itemId, player.getName()));
                 runAsync(() -> ItemEventRepository.save(ItemEventType.TO_ENDER_CHEST, itemId, player));
             }
         }
@@ -60,7 +59,7 @@ public class OwnedItemListener implements Listener {
             for (ItemStack item : event.getInventory().getContents()) {
                 String itemId = ItemOwners.getItemId(item);
                 if (itemId == null) continue;
-                log(String.format(LogMessages.TO_PLAYER_VAULT, itemId, vaultNumber, player));
+                log(String.format(LogMessages.TO_PLAYER_VAULT, itemId, vaultNumber, player.getName()));
                 runAsync(() -> ItemEventRepository.save(ItemEventType.TO_PLAYER_VAULT, itemId, player));
             }
         }
@@ -72,6 +71,7 @@ public class OwnedItemListener implements Listener {
 
     @EventHandler
     public void onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
+        if (!event.getPlayer().hasPermission("essentials.clearinventory")) return;
         if (CLEAR_INVENTORY.contains(event.getMessage())) {
             for (ItemStack item : event.getPlayer().getInventory().getContents()) {
                 String itemId = ItemOwners.getItemId(item);
@@ -79,13 +79,13 @@ public class OwnedItemListener implements Listener {
 
                 if (ItemOwners.getBukkitConfig().getBoolean("clear-inventory-confirmation")) {
                     if (ciConfirmation.hasConfirmed(event.getPlayer().getUniqueId())) {
-                        log(String.format(LogMessages.CLEARED_INVENTORY, itemId, event.getPlayer().getUniqueId()));
+                        log(String.format(LogMessages.CLEARED_INVENTORY, itemId, event.getPlayer().getName()));
                         runAsync(() -> ItemEventRepository.save(ItemEventType.CLEARED_INVENTORY, itemId, event.getPlayer()));
                     }
                     return;
                 }
 
-                log(String.format(LogMessages.CLEARED_INVENTORY, itemId, event.getPlayer().getUniqueId()));
+                log(String.format(LogMessages.CLEARED_INVENTORY, itemId, event.getPlayer().getName()));
                 runAsync(() -> ItemEventRepository.save(ItemEventType.CLEARED_INVENTORY, itemId, event.getPlayer()));
             }
         }
@@ -216,6 +216,21 @@ public class OwnedItemListener implements Listener {
         InventoryType inventory = event.getClickedInventory().getType();
         Player player = (Player) event.getWhoClicked();
         UUID playerId = event.getWhoClicked().getUniqueId();
+
+        /* ======================
+         * Grindstone
+         * ====================== */
+        if (event.getClickedInventory().getType() == InventoryType.GRINDSTONE && event.getSlotType() == InventoryType.SlotType.RESULT) {
+            for (ItemStack item : event.getClickedInventory().getContents()) {
+                String itemId = ItemOwners.getItemId(item);
+                if (itemId == null) continue;
+
+                log(String.format(LogMessages.GRINDED, itemId, player.getName()));
+                runAsync(() -> ItemEventRepository.save(ItemEventType.GRINDED, itemId, player));
+            }
+
+            return;
+        }
 
         /* ======================
          * Hotbar swaps

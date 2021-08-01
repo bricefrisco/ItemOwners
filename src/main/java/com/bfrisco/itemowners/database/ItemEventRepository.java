@@ -29,7 +29,8 @@ public final class ItemEventRepository {
                 ItemEventType.BROKE.name(),
                 ItemEventType.DISPOSED.name(),
                 ItemEventType.DAMAGED.name(),
-                ItemEventType.DESPAWNED.name());
+                ItemEventType.DESPAWNED.name(),
+                ItemEventType.SALVAGED.name());
     }
 
     public static void save(ItemEventType type, String itemId, Player player) {
@@ -114,7 +115,7 @@ public final class ItemEventRepository {
 
     public static int deleteBefore(Date date) throws SQLException {
         DeleteBuilder<ItemEvent, Long> deleteBuilder = repository.deleteBuilder();
-        deleteBuilder.where().eq("date", date);
+        deleteBuilder.where().lt("date", date);
         return deleteBuilder.delete();
     }
 
