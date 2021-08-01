@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 public class ItemHistory implements CommandExecutor {
     private final Plugin plugin;
 
-    private static final Pattern PATTERN = Pattern.compile("^[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}");
+    private static final Pattern PATTERN = Pattern.compile("^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}");
 
     public ItemHistory(Plugin plugin) {
         this.plugin = plugin;

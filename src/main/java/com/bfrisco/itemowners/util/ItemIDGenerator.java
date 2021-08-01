@@ -3,7 +3,7 @@ import java.security.SecureRandom;
 
 public final class ItemIDGenerator {
     private static final int NUM_CHARS = 12;
-    private static final String characters = "abcdefghijklmnopqrstuvwxyz";
+    private static final String characters = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
     private static final String digits = "0123456789";
     private static final String alphanumeric = characters + digits;
 
