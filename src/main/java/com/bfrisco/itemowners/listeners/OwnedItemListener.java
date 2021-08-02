@@ -63,10 +63,6 @@ public class OwnedItemListener implements Listener {
                 runAsync(() -> ItemEventRepository.save(ItemEventType.TO_PLAYER_VAULT, itemId, player));
             }
         }
-
-        else {
-            ItemOwners.getBukkitLogger().info("Inventory name: " + tc.content());
-        }
     }
 
     @EventHandler
