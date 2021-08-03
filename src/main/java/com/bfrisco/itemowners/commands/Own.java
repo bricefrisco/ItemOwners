@@ -5,6 +5,7 @@ import com.bfrisco.itemowners.database.ItemRepository;
 import com.bfrisco.itemowners.util.ItemIDGenerator;
 import com.bfrisco.itemowners.util.ItemSerialization;
 import com.bfrisco.itemowners.util.RateLimiter;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -74,6 +75,13 @@ public class Own implements CommandExecutor {
 
                 ItemMeta meta = item.getItemMeta();
                 meta.setLore(lore);
+                if (!meta.hasDisplayName()) {
+                    String name = item.getType().toString()
+                            .toLowerCase(Locale.ROOT)
+                            .replace("_", " ");
+                    meta.setDisplayName(WordUtils.capitalize(name));
+                }
+
                 item.setItemMeta(meta);
 
                 String data = ItemSerialization.toBase64(item);
