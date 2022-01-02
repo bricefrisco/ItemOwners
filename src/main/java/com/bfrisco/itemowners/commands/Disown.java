@@ -70,9 +70,10 @@ public class Disown implements CommandExecutor {
 
                 ItemOwners.getBukkitLogger().info("Player " + player.getName() + " successfully disowned item " + itemId);
 
-                ItemRepository.delete(itemId);
                 ItemEventRepository.delete(itemId);
-            } catch (SQLException se) {
+                ItemRepository.delete(itemId);
+            } catch (Exception e) {
+                e.printStackTrace();
                 player.sendMessage("An internal error occurred while executing this command.");
             }
         });
