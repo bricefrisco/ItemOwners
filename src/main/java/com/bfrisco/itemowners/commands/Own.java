@@ -71,26 +71,29 @@ public class Own implements CommandExecutor {
             try {
                 String itemId = generateItemId();
 
-                List<String> lore = addItemLore(item.getItemMeta().getLore(), itemId, player.getName());
-
+                // Give display name to items which do not already have one
                 ItemMeta meta = item.getItemMeta();
-                meta.setLore(lore);
                 if (!meta.hasDisplayName()) {
                     String name = item.getType().toString()
                             .toLowerCase(Locale.ROOT)
                             .replace("_", " ");
                     meta.setDisplayName(WordUtils.capitalize(name));
+                    item.setItemMeta(meta);
                 }
 
+                // Serialize and store the item
+                String data = ItemSerialization.toBase64(item);
+                ItemRepository.save(itemId, player.getUniqueId().toString(), data);
+
+                // Add lore to item
+                List<String> lore = addItemLore(item.getItemMeta().getLore(), itemId, player.getName());
+                meta.setLore(lore);
                 item.setItemMeta(meta);
 
-                String data = ItemSerialization.toBase64(item);
-
-                ItemRepository.save(itemId, player.getUniqueId().toString(), data);
                 ItemOwners.getBukkitLogger().info("Player " + player.getName() + " has owned an item with generated ID: " + itemId);
                 player.sendMessage(ChatColor.WHITE + "Successfully owned item with generated ID: " + itemId);
-            } catch (SQLException se) {
-                ItemOwners.getBukkitLogger().warning("Error occurred while generating item ID: " + se.getMessage());
+            } catch (Exception e) {
+                ItemOwners.getBukkitLogger().warning("Error occurred while generating item ID: " + e.getMessage());
                 player.sendMessage(ChatColor.RED + "Unexpected error occurred while generating and storing item ID.");
             }
         });
