@@ -22,7 +22,7 @@ Hovering over the Item ID will show the item name, enchantments, and metadata.
 
 
 ## Supported Versions
-- Minecraft **1.16.x or newer**: ItemOwners **1.0.0**
+- Minecraft **1.16.x or newer**: ItemOwners **1.0.1**
 
 ## Commands
 - ***/own***
