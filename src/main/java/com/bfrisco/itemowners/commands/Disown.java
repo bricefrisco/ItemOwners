@@ -51,17 +51,19 @@ public class Disown implements CommandExecutor {
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
+                ItemMeta meta = mainHand.getItemMeta();
                 Item item = ItemRepository.findById(itemId);
-                if (!item.getOwnerId().equals(player.getUniqueId().toString()) && !player.hasPermission(ItemOwnerPermissions.DISOWN_ALL_TOOLS)) {
-                    player.sendMessage(ChatColor.RED + "You do not own this item.");
-                    return;
+
+                if (item != null) { // Bug resolution: Items aren't in DB
+                    if (!item.getOwnerId().equals(player.getUniqueId().toString()) && !player.hasPermission(ItemOwnerPermissions.DISOWN_ALL_TOOLS)) {
+                        player.sendMessage(ChatColor.RED + "You do not own this item.");
+                        return;
+                    }
                 }
 
                 List<String> loreAfter = mainHand.getItemMeta().getLore().stream()
                         .filter(lore -> !lore.startsWith(ChatColor.RED + "Item ID: ") && !lore.startsWith(ChatColor.RED + "Owner: "))
                         .collect(Collectors.toList());
-
-                ItemMeta meta = mainHand.getItemMeta();
                 meta.setLore(loreAfter);
                 mainHand.setItemMeta(meta);
                 player.sendMessage("Successfully disowned item.");
