@@ -91,7 +91,8 @@ public class Own implements CommandExecutor {
                 item.setItemMeta(meta);
 
                 ItemOwners.getBukkitLogger().info("Player " + player.getName() + " has owned an item with generated ID: " + itemId);
-                player.sendMessage(ChatColor.WHITE + "Successfully owned item with generated ID: " + itemId);
+                player.sendMessage(ChatColor.GREEN + "Successfully owned item with generated ID: " + itemId + ". Please take a screenshot of your " +
+                        "owned tool with F2, keep the ID for your records");
             } catch (Exception e) {
                 ItemOwners.getBukkitLogger().warning("Error occurred while generating item ID: " + e.getMessage());
                 player.sendMessage(ChatColor.RED + "Unexpected error occurred while generating and storing item ID.");
