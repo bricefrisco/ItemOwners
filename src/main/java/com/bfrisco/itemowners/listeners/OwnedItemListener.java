@@ -201,6 +201,13 @@ public class OwnedItemListener implements Listener {
     }
 
     @EventHandler
+    public void onAnvilUpdateEvent(PrepareAnvilEvent event) {
+        String itemId = ItemOwners.getItemId(event.getInventory().getSecondItem());
+        if (itemId == null) return;
+        event.setResult(null);
+    }
+
+    @EventHandler
     public void onInventoryClickEvent(InventoryClickEvent event) {
         if (event.getClickedInventory() == null) return;
 
